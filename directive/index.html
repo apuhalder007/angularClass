@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Angular Js Directive Example</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>	
+
+</head>
+<body ng-app="app">
+	<div class="container">
+		<div class="row">
+		  <div ng-controller="appCtrl">
+			  	<div class="friends" >
+			  		<div class="col-md-3" ng-repeat="(key, friend) in friends">
+			  			<friend-info friend="friend" title="'Friend Lists'"></friend-info>
+			  		</div>
+			  	</div>
+			</div>
+		</div>
+	</div>
+	<script src="app.js"></script>
+</body>
+</html>

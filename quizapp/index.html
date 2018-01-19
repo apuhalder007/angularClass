@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            NG Quiz App
+        </title>
+        <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" rel="stylesheet">
+        </link>
+    </head>
+    <body ng-app="quizApp">
+        <div class="container">
+            <div class="row" ng-controller="quizCtrl">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div id="question" ng-if="!questionAnswerToggle">
+                        <ul class="list-group">
+                            <li class="list-group-item active">
+                                {{currentQuestion.title}}
+                                <span class="pull-right">
+                                    {{QuestionIndex + 1}} of {{totalQuestion}}
+                                </span>
+                            </li>
+                            <li class="list-group-item" ng-repeat="(key, value) in currentQuestion.ansCollection">
+                                <input name="ans" ng-click="checkedAnswer(QuestionIndex, key)" type="radio">
+                                    {{value}}
+                                </input>
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary" ng-click="showQuestion();" ng-if="!btnToggle">
+                            Next
+                        </button>
+                        <button class="btn btn-success" ng-click="showResult();" ng-if="btnToggle">
+                            Result
+                        </button>
+                    </div>
+                    <div id="result" ng-if="questionAnswerToggle">
+                        <ul class="list-group">
+                            <li class="list-group-item active">
+                                Result Status
+                            </li>
+                            <li class="list-group-item">
+                                <div class="alert {{marksStatusAlertClass}}" role="alert">
+                                    <span ng-bind-html="marksStatusText">
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js">
+    </script>
+    <script async="" charset="utf-8" defer="" type="text/javascript">
+        var app = angular.module('quizApp', []);
+        app.controller('quizCtrl', function($scope, $sce){
+            $scope.questions = [
+            {title:'First Question', ansCollection:['First Answer','Second Answer','Third Answer'], mark:1, correct:0},
+            {title:'Second Question', ansCollection:['First Answer','Second Answer','Third Answer'], mark:1, correct:1},
+            {title:'Third Question', ansCollection:['First Answer','Second Answer','Third Answer'], mark:1, correct:2},
+            {title:'Forth Question', ansCollection:['First Answer','Second Answer','Third Answer'], mark:1, correct:0},
+            {title:'Fiveth Question', ansCollection:['First Answer','Second Answer','Third Answer'], mark:1, correct:1}
+            ];
+            $scope.QuestionIndex = 0;
+            $scope.currentQuestion = $scope.questions[$scope.QuestionIndex];
+            $scope.totalQuestion = $scope.questions.length;
+
+            $scope.answers = [];
+            $scope.totalMarks = 0;
+            $scope.marksPercentage = 0;
+            $scope.marksStatusText = '';
+            $scope.marksStatusAlertClass = '';
+            $scope.btnToggle = false;
+            $scope.questionAnswerToggle = false;
+
+            $scope.showQuestion = function(){
+                $scope.QuestionIndex++;
+                $scope.currentQuestion = $scope.questions[$scope.QuestionIndex];
+                if(($scope.totalQuestion - 1) == $scope.QuestionIndex){
+                    $scope.btnToggle = true;
+                }
+            }
+
+            $scope.checkedAnswer = function(questionIndex, answerIndex){
+                $scope.answers[questionIndex] = answerIndex;
+                console.log($scope.answers);
+            }
+
+            $scope.showResult = function(){
+               // console.log($scope.answers);
+               var totalAnswer = 0;
+                if($scope.answers.length > 0){
+                    angular.forEach($scope.answers, function(value, key){
+                        if($scope.questions[key].correct == value){
+                            $scope.totalMarks+= $scope.questions[key].mark;
+                            totalAnswer++;
+                        }
+                    });
+
+                }
+                $scope.marksPercentage = (totalAnswer/$scope.totalQuestion) * 100;
+
+                if($scope.marksPercentage >= 90){
+                    $scope.marksStatusAlertClass = 'alert-success';
+                    $scope.marksStatusText = $sce.trustAsHtml('<strong>'+
+                    'Well done!'+
+                    '</strong>'+
+                    ' You have successfully passed with '+$scope.marksPercentage +'%. marks');
+                    
+                }else if($scope.marksPercentage >= 60){
+                    $scope.marksStatusAlertClass = 'alert-warning';
+                    $scope.marksStatusText = $sce.trustAsHtml('<strong>'+
+                    'Good!'+
+                    '</strong>'+
+                    ' Could have been better, you passed with '+$scope.marksPercentage +'%. marks');
+                    
+                }else{
+                    $scope.marksStatusAlertClass = 'alert-danger';
+                    $scope.marksStatusText = $sce.trustAsHtml('<strong>'+
+                    'Not good enough!'+
+                    '</strong>'+
+                    ' You have to work really hard, you get only '+$scope.marksPercentage +'%. marks');
+                     
+                }
+                $scope.questionAnswerToggle = true;
+            }
+
+        });
+    </script>
+</html>

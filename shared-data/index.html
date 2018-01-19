@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title> Shared Data Between Controller With Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+
+    <style media="screen">
+      input[type="text"].ng-touched.ng-invalid {
+        border-bottom: red 2px solid;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div ng-app="app" class="col-md-8 col-md-offset-2">
+          <div class="col-md-6">
+            <h1>Messages</h1>
+            <hr/>
+            <div ng-controller="ListCtrl">
+              <p>Total Item {{status}}</p>
+              <p ng-repeat="message in messages">{{ message.id }}: {{ message.text }}</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <h1>Add Message</h1>
+            <hr/>
+            <div ng-controller="PostCtrl">
+              <form name="messageForm" ng-submit="addMessage(newMessage)" novalidate>
+                <div class="form-group">
+                  <input type="text" name="newMessage1" ng-model="newMessage" class="form-control" ng-required="true">{{messageForm.newMessage1.$vaild}}
+                </div>
+                <button type="submit" class="btn btn-primary" ng-disabled="messageForm.$invalid">Add Message</button>
+
+              </form>
+            </div>
+          </div>
+      </div>
+      </div>
+    </div>
+
+    <script src="app.js" charset="utf-8"></script>
+  </body>
+</html>

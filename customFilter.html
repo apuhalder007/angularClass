@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Angular Custom Filter JS</title>
+</head>
+<body ng-app="myApp">
+<div ng-controller="myCtrl">
+	{{test | myFilter}}
+</div>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+<script type="text/javascript">
+	var app = angular.module('myApp',[]);
+	app.controller('myCtrl', function($scope){
+		$scope.test = 0;
+	});
+
+	app.filter('myFilter', function(){
+		return function(test){
+			switch(test){
+				case 1:
+				return "Test 1";
+				case 2:
+				return "Test 2";
+				default:
+				return "Test 0";
+			}
+		}
+	});
+</script>
+</body>
+</html>
